@@ -6,33 +6,103 @@ const TimeForm = ({ setTimeValue }) => {
   const [ activeTab, setActivetab ] = useState('hh');
   const [ hhValue, setHhValue ] = useState('');
   const [ mmValue, setMmValue ] = useState('');
-  const inputHhEl = useRef(null);
-  const inputMmEl = useRef(null);
+  const inputHhEl = useRef(null); // ref for hours input
+  const inputMmEl = useRef(null); // ref for minutes input
 
+  // On load: focus on HH
   useEffect(() => {
     inputHhEl.current.focus(inputHhEl);
   }, []);
 
+  // On value update: update total time value 
   useEffect(() => {
     setTimeValue(`${hhValue}:${mmValue}`);
   }, [hhValue, mmValue, setTimeValue]);
 
+  // On hours update: if hours is two digits than focus on minutes 
+  useEffect(() => {
+    if (hhValue.length >= 2 && document.activeElement === inputHhEl.current) {
+      inputMmEl.current.focus();
+    }
+  }, [hhValue]);
+
+  // On Hours input change
   const onHhChange = ({ target: { value } }) => {
-    setHhValue(value);
+    let newValue =  /^\d{0,2}$/.test(value) ? value : '';
+    const valueInt = parseInt(newValue);
+
+    // hours can't be more then 23
+    if (valueInt > 23) {
+      newValue = '23';
+    }
+
+    // if the first digit is more then 2 than assume it's zero padded (eg '09')
+    if (valueInt > 2 && newValue.length === 1) {
+      newValue = `0${newValue}`;
+    }
+
+    setHhValue(newValue);
   }
 
+  // On Hours input focus
+  const onHhFocus = ({ target }) => {
+    setActivetab('hh');
+    target.select();
+  }
+
+  // On Hours input blur
+  const onHhBlur = () => {
+    // number should be zero padded
+    if (hhValue.length === 1) {
+      setHhValue(`0${hhValue}`);
+    }
+  }
+
+  // On Minutes input change
   const onMmChange = ({ target: { value } }) => {
-    setMmValue(value);
+    let newValue =  /^\d{0,2}$/.test(value) ? value : '';
+    const valueInt = parseInt(newValue);
+
+    // minutes can't be more then 59
+    if (valueInt > 59) {
+      newValue = '59';
+    }
+
+    // if the first digit is more then 5 than assume it's zero padded (eg '09')
+    if (valueInt > 5 && newValue.length === 1) {
+      newValue = `0${newValue}`;
+    }
+
+    setMmValue(newValue);
+  }
+
+  // On Minutes input blue
+  const onMmBlur = () => {
+    // number should be zero padded
+    if (mmValue.length === 1) {
+      setMmValue(`0${mmValue}`);
+    }
+
+    // mins should not be blank if hours is set
+    if (mmValue === '' && hhValue !== '') {
+      setMmValue('00');
+    }
+  }
+
+  // On Minutes input focus
+  const onMmFocus = ({ target }) => {
+    setActivetab('mm');
+    target.select();
   }
 
   const onHhBtnClick = ({ target: { value } }) => {
-    console.log('click');
     setHhValue(value);
     inputMmEl.current.focus();
   }
 
   const onMmBtnClick = ({ target: { value } }) => {
     setMmValue(value);
+    // TODO to something after
   }
 
   const hhValueBtns = [];
@@ -79,9 +149,11 @@ const TimeForm = ({ setTimeValue }) => {
             className="time-form__input"
             value={hhValue}
             ref={inputHhEl}
-            placeholder="--"
+            pattern="[0-9]*"
+            inputmode="numeric"
             onChange={onHhChange}
-            onFocus={() => setActivetab('hh')} 
+            onFocus={onHhFocus}
+            onBlur={onHhBlur}
           />
         </li>
         <li className="time-form__semi">:</li>
@@ -91,9 +163,11 @@ const TimeForm = ({ setTimeValue }) => {
             className="time-form__input"
             value={mmValue}
             ref={inputMmEl}
-            placeholder="--"
+            pattern="[0-9]*"
+            inputmode="numeric"
             onChange={onMmChange}
-            onFocus={() => setActivetab('mm')}
+            onFocus={onMmFocus}
+            onBlur={onMmBlur}
           />
         </li>
       </ul>
