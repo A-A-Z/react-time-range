@@ -1,4 +1,9 @@
 
+$colour-white: #fff;
+$form-bg-colour: #f5f5f5;
+$active-colour: #60a6ea;
+
+@import "./suggestions";
 @import "./time-form";
 @import "./time-range-model";
 @import "./time-range";

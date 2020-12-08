@@ -1,0 +1,39 @@
+
+.suggestions {
+
+  padding: 2px 18px;
+
+  &__title {
+    border-bottom: 1px solid #eee;
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 300;
+    margin: 0;
+    padding: 0;
+    text-transform: uppercase;
+  }
+
+  &__list {
+    list-style-type: none;
+    margin: 12px 0;
+    padding: 0;
+  }
+
+  &__item {
+    margin: 0 0 4px 0;
+  }
+
+  &__time-btn {
+    background-color: $colour-white;
+    border: 1px solid $active-colour;
+    border-radius: 8px;
+    color: $active-colour;
+    cursor: pointer;
+    font-size: 1.1rem;
+    letter-spacing: 0.15rem;
+    margin: 0;
+    padding: 4px 0;
+    width: 150px;
+  }
+
+}
