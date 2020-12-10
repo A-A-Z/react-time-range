@@ -1,12 +1,38 @@
 
 .time-form {
 
+  &__title {
+    font-size: 1.5rem;
+    margin: 2px 0 5px 0;
+    padding: 0;
+  }
+
+  &__subtitle {
+    font-size: 0.8rem;
+    font-weight: 300;
+    margin: 0;
+    padding: 0;
+  }
+
   &__fields {
     background-color: $form-bg-colour;
     border-radius: 4px;
     display: flex;
-    padding: 8px;
+    padding: 12px;
     margin: 18px;
+
+    .clock-icon {
+      width: 1.5rem;
+      margin: 0 15px 0 2px;
+      // opacity: 0.8;
+      overflow: visible;
+
+      .icon-line {
+        fill: $active-colour;
+        stroke: $active-colour;
+        stroke-width: 2px;
+      }
+    }
   }
 
   &__input {
@@ -18,6 +44,7 @@
     font-size: 1.7rem;
     font-weight: 600;
     height: 40px;
+    letter-spacing: 0.2rem;
     margin: 0;
     padding: 0;
     text-align: center;

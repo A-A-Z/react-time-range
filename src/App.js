@@ -8,7 +8,7 @@ function App() {
       <header className="App-header">
         <h1>Time range Input</h1>
         <TimeRange
-          startTimeValue="9:30"
+          startTimeValue="9:00"
           endTimeValue="17:45"
         />
       </header>

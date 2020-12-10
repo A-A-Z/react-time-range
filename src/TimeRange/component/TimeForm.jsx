@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 // import classNames from 'classnames';
-import { zeroPadUnit } from '../helpers/format';
+import { zeroPadUnit, timeToFloat } from '../helpers/format';
+import { ReactComponent as ClockIcon } from './clock.svg';
 
 const TimeForm = ({ isOpen, startTime, timeValue, suggestTimes, setTimeValue }) => {
   const [ defaultHhValue, defaultMmValue ] = timeValue.split(':');
@@ -110,9 +111,10 @@ const TimeForm = ({ isOpen, startTime, timeValue, suggestTimes, setTimeValue }) 
   }
 
   const onSuggestClick = ({ target: { value } }) => {
-    console.log('click', value);
-    setTimeValue(value); // FIX
+    setTimeValue(value);
   }
+
+  // const filterTimesByStartTime = timeString => timeToFloat(timeString) > timeToFloat(startTime)
 
   if (!isOpen) {
     return null;
@@ -121,7 +123,11 @@ const TimeForm = ({ isOpen, startTime, timeValue, suggestTimes, setTimeValue }) 
   return (
     <section className="time-form">
 
+      <h2 className="time-form__title">Start Time</h2>
+      <h3 className="time-form__subtitle">(HH:MM, 24 hours)</h3>
+      
       <div className="time-form__fields">
+        <ClockIcon />
         <input 
           type="text"
           className="time-form__input"
@@ -129,6 +135,7 @@ const TimeForm = ({ isOpen, startTime, timeValue, suggestTimes, setTimeValue }) 
           ref={inputHhEl}
           pattern="[0-9]*"
           inputMode="numeric"
+          aria-label="Hour"
           onChange={onHhChange}
           onFocus={onHhFocus}
           onBlur={onHhBlur}
@@ -141,6 +148,7 @@ const TimeForm = ({ isOpen, startTime, timeValue, suggestTimes, setTimeValue }) 
           ref={inputMmEl}
           pattern="[0-9]*"
           inputMode="numeric"
+          aria-label="Minutes"
           onChange={onMmChange}
           onFocus={onMmFocus}
           onBlur={onMmBlur}
@@ -151,15 +159,19 @@ const TimeForm = ({ isOpen, startTime, timeValue, suggestTimes, setTimeValue }) 
         <h2 className="suggestions__title">Suggestions</h2>
 
         <ul className="suggestions__list">
-          {suggestTimes.filter(time => true /* TODO: fitler by starting time */).map(time => (
-            <li key={`time-${time}`} className="suggestions__item">
-              <button 
-                className="suggestions__time-btn"
-                value={time}
-                onClick={onSuggestClick}
-              >{time}</button>
-            </li>
-          ))}
+          {suggestTimes
+            .filter(timeString => timeToFloat(timeString) > timeToFloat(startTime)) // Filter: only times after startTime
+            .slice(0, 5)
+            .map(time => (
+              <li key={`time-${time}`} className="suggestions__item">
+                <button 
+                  className="suggestions__time-btn"
+                  value={time}
+                  onClick={onSuggestClick}
+                >{time}</button>
+              </li>
+            )
+          )}
         </ul>
 
       </div>

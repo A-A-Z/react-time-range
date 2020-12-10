@@ -8,7 +8,7 @@ const TimeRangeModel = ({ startTimeValue, endTimeValue, isOpen, setStartTime, se
     return null;
   }
 
-  const startTime = '09:30';
+  const startTime = '09:00';
   const suggestStartTimes = [ '08:45', '09:15', '09:45', '10:15' ];
 
   return (
